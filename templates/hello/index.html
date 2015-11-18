@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load staticfiles%}
+
+{% block title %}Main page{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            {% if person %}
+            <div class="col-md-6">
+                <p>{{ person.first_name }}</p>
+                <p>{{ person.last_name }} </p>
+                <p>{{ person.date_of_birthday }}</p>
+                <p>Bio parameters:</p>
+                {{ person.bio | linebreaks }}
+            </div><!-- /.col-md-6 -->
+            <div class="col-md-6 col-md-pull-3">
+                <p><b>Contacts:</b></p>
+                <p>E-mail: {{ person.email }}</p>
+                <p>Jabber: {{ person.jabber }}</p>
+                <p>Skype: {{ person.skype }}</p>
+                <p>Other:</p>
+                {{ person.other_contacts | linebreaks }}
+            </div><!-- /.col-md-6 -->
+            {% else %}
+            <div class="col-md-12">
+                <p>No records found in db!</p>
+            </div><!-- /.col-md-12 -->
+            {% endif %}
+        </div><!-- /.row -->
+    </div><!-- /.container -->
+{% endblock content %}

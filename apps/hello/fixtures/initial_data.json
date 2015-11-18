@@ -1,0 +1,33 @@
+[
+    {
+        "model": "hello.person",
+        "pk": 1,
+        "fields": {
+            "first_name": "Сергей",
+            "last_name": "Шепель",
+            "date_of_birthday": "2015-02-01",
+            "bio": "Not very tall, fatty, black hair\nHas nice sense of humor)",
+            "email": "sergey.shepel@outlook.com",
+            "jabber": "sergeyshepel@42cc.co",
+            "skype": "echo123",
+            "other_contacts": "No other contacts\nwere provided yet"
+        }
+    },
+    {
+        "pk": 1, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "admin", 
+            "first_name": "", 
+            "last_name": "", 
+            "is_active": true, 
+            "is_superuser": true, 
+            "is_staff": true,
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "pbkdf2_sha256$12000$LIoXJ1Y2LIrx$YFwXShQlP+hvRmSWZkAob+J7uwK6HFUWRE8tiL+QY5U=", 
+            "email": "sergey.shepel@outlook.com", 
+            "date_joined": "2015-11-09T20:32:25.095Z"
+        }
+    }
+]

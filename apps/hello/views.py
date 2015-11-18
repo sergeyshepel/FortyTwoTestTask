@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 
-# Create your views here.
+from hello.models import Person
+
+
+def index(request):
+    person = Person.objects.first()
+    return render(request, 'hello/index.html', {'person': person})
