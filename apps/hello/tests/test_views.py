@@ -2,62 +2,27 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from hello.models import Person
+from hello.models import Person, Requests
 
 NUMBER_OF_PERSON = 10
 
 
-class PersonModelTest(TestCase):
-    """
-    Test the creation of new object in Person table
-    """
-
-    def create_person(self):
-        return Person.objects.create(first_name="Vasilii",
-                                     last_name="Pupkin",
-                                     date_of_birthday="2014-02-01",
-                                     bio="Not very tall",
-                                     email="testemail@email.com",
-                                     jabber="",
-                                     skype="echo123",
-                                     other_contacts="No other contacts")
-
-    def test_person_creation(self):
-        """
-        Test if new object was created
-        """
-        person = self.create_person()
-        person_unicode = (person.first_name + " " +
-                          person.last_name + " " +
-                          person.email)
-        self.assertTrue(isinstance(person, Person))
-        self.assertEqual(person.__unicode__(), person_unicode)
-
-
 class IndexViewTests(TestCase):
-    """
-    Test index view on rendering correct data
-    """
+    """ Test index view on rendering correct data """
 
     def test_index_view_to_be_resolved_by_root_url(self):
-        """
-        Check if index view could be resolved by root url
-        """
+        """ Check if index view could be resolved by root url """
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
 
     def test_index_view_return_correct_template(self):
-        """
-        Index function should return correct template
-        """
+        """ Index function should return correct template """
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'hello/index.html')
 
     def test_index_view_return_empty_reply(self):
-        """
-        Index function should return message when no data in db
-        """
+        """ Index function should return message when no data in db """
         Person.objects.all().delete()
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
@@ -65,9 +30,7 @@ class IndexViewTests(TestCase):
         self.assertEqual(response.context['person'], None)
 
     def test_index_view_return_correct_value(self):
-        """
-        Index function should return correct item from database
-        """
+        """ Index function should return correct item from database """
         person = Person.objects.first()
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
@@ -78,9 +41,7 @@ class IndexViewTests(TestCase):
         self.assertContains(response, person.email)
 
     def test_index_view_if_more_than_one_person_id_db(self):
-        """
-        Test render of index page when more than one person in db
-        """
+        """ Test render of index page when more than one person in db """
         for i in range(0, NUMBER_OF_PERSON):
             Person.objects.create(first_name="Vasilii" + str(i),
                                   last_name="Pupkin" + str(i),
@@ -104,3 +65,42 @@ class IndexViewTests(TestCase):
         self.assertNotContains(response, 'Vasilii0')
         self.assertNotContains(response, 'Pupkin0')
         self.assertNotContains(response, 'testemail@email.com')
+
+
+class RequestsViewTests(TestCase):
+    """ Test requests view on rendering correct data """
+
+    def test_could_be_resolved(self):
+        """ Check if requests view could be resolved """
+        response = self.client.get(reverse('requests'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_return_correct_template(self):
+        """ Requests function should returns correct template """
+        response = self.client.get(reverse('requests'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'hello/requests.html')
+
+    def test_requests_page_return_correct_number_of_records(self):
+        """ Requests function should returns 10 records from db """
+        for i in range(0, 20):
+            response = self.client.get(reverse('requests'))
+            self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['new_requests']), 10)
+
+    def test_if_requests_view_returns_valid_data(self):
+        """ Check if Requests function returns valid data """
+        response = self.client.get(reverse('requests'))
+        self.assertEqual(response.status_code, 200)
+        content = response.context['new_requests'][0]
+        data = Requests.objects.first()
+        self.assertEqual(content, data)
+
+    def test_middleware_doesnt_save_ajax_requests(self):
+        """ Check if middleware doesn't save ajax requests on requests page"""
+        self.client.get(reverse('requests'),
+                        HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        requsts_stored_in_db = Requests.objects.all().count()
+
+        self.assertEquals(requsts_stored_in_db, 0)

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Requests{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+            {% if new_requests %}
+              <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th hidden>ID</th>
+                            <th>Time</th>
+                            <th>Path</th>
+                            <th>Method</th>
+                            <th>User agent</th>
+                            <th>Remote address</th>
+                            <th>Secure</th>
+                            <th>Ajax</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in new_requests %}
+                        <tr>
+                          <td hidden>{{ item.pk }}</td>
+                          <td>{{ item.time|date:"D, d M Y H:i:s" }}</td>
+                          <td>{{ item.path }}</td>
+                          <td>{{ item.method }}</td>
+                          <td>{{ item.user_agent }}</td>
+                          <td>{{ item.remote_addr }}</td>
+                          <td>{{ item.is_secure }}</td>
+                          <td>{{ item.is_ajax }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+              </div><!-- /.table-responsive -->
+            {% else %}
+                <p>No records found in db!</p>
+            {% endif %}
+            </div><!-- /.col-md-12 -->
+        </div><!-- /.row -->
+    </div><!-- /.container -->
+{% endblock content %}
+{% block js %}
+   {{ block.super }}
+   <script src="{% static 'js/middleware.js' %}"></script>
+{% endblock js %}

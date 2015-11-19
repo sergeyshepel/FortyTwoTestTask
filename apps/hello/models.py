@@ -22,3 +22,20 @@ class Person(models.Model):
     class Meta:
         verbose_name = 'Person'
         verbose_name_plural = 'People'
+
+
+class Requests(models.Model):
+    time = models.DateTimeField(auto_now_add=True)
+    path = models.CharField(max_length=1000)
+    method = models.CharField(max_length=50)
+    user_agent = models.CharField(max_length=1000, blank=True, null=True)
+    remote_addr = models.IPAddressField()
+    is_secure = models.BooleanField()
+    is_ajax = models.BooleanField()
+
+    def __unicode__(self):
+        return "%s %s %s" % (self.time, self.path, self.remote_addr)
+
+    class Meta:
+        verbose_name = 'Requests'
+        verbose_name_plural = 'Requests'

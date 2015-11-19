@@ -5,4 +5,7 @@ urlpatterns = patterns(
     url(
         r'^$', 'index', name='index'
     ),
+    url(
+        r'^requests/$', 'requests', name='requests'
+    ),
 )
