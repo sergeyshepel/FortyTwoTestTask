@@ -40,6 +40,7 @@
                     </button>
                     <a class="navbar-brand" href="{% url 'index' %}">42 Coffee Cups Test Assignment</a>
                 </div>
+                {% include "hello/auth_form.html" %}
             </div>
         </nav>
         {% block content %}{% endblock content %}

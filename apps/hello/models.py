@@ -1,4 +1,10 @@
+# -*- coding: utf-8 -*-
+import StringIO
+
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
+
+from PIL import Image as Img
 
 
 class Person(models.Model):
@@ -16,8 +22,56 @@ class Person(models.Model):
     other_contacts = models.TextField("other contacts",
                                       max_length=255, blank=True)
 
+    person_pic = models.ImageField("photo",
+                                   upload_to='pic_folder/',
+                                   default='pic_folder/None/no-img.jpg')
+
     def __unicode__(self):
         return "%s %s %s" % (self.first_name, self.last_name, self.email)
+
+    def save(self, *args, **kwargs):
+        image_width = 200
+        image_height = 200
+        image_size = (image_width, image_height)
+        image_isSame = False
+
+        if self.person_pic:
+            try:
+                this = Person.objects.get(id=self.id)
+                if this.person_pic == self.person_pic:
+                    image_isSame = True
+            except:
+                pass
+
+            image = Img.open(StringIO.StringIO(self.person_pic.read()))
+
+            if image.mode not in ("L", "RGB"):
+                image = image.convert("RGB")
+
+            (imw, imh) = image.size
+            if (imw > image_width) or (imh > image_height):
+                image.thumbnail(image_size, Img.ANTIALIAS)
+
+            output = StringIO.StringIO()
+            image.save(output, format='JPEG', quality=75)
+            output.seek(0)
+            self.person_pic = InMemoryUploadedFile(
+                output,
+                'ImageField',
+                "%s.jpg" % self.person_pic.name.split('.')[0],
+                'image/jpeg', output.len, None
+            )
+
+        try:
+            this = Person.objects.get(id=self.id)
+            if this.person_pic == self.person_pic or image_isSame:
+                self.person_pic = this.person_pic
+            else:
+                this.person_pic.delete(save=False)
+        except:
+            pass
+
+        super(Person, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Person'

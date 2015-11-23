@@ -29,6 +29,13 @@
             </div><!-- /.col-md-12 -->
             {% endif %}
         </div><!-- /.row -->
+        {% if user.is_authenticated %}
+        <div class="row">
+            <div class="col-md-12">
+                <p><a href="{% url 'edit' pk=person.pk %}">edit item</a></p>
+            </div><!-- /.col-md-12 -->
+        </div><!-- /.row -->
+        {% endif %}
         <hr>
         <div class="row">
             <div class="col-md-12">

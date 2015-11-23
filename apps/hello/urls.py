@@ -8,4 +8,7 @@ urlpatterns = patterns(
     url(
         r'^requests/$', 'requests', name='requests'
     ),
+    url(
+        r'^edit/(?P<pk>\d+)/$', 'edit', name='edit'
+    ),
 )

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import json
 
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.core import serializers
+from django.contrib.auth.decorators import login_required
 
 from hello.models import Person, Requests
+from hello.forms import PersonForm
 
 
 def index(request):
@@ -31,3 +33,30 @@ def requests(request):
     return render(request,
                   'hello/requests.html',
                   {'new_requests': new_requests})
+
+
+@login_required()
+def edit(request, pk=None):
+    person_obj = get_object_or_404(Person, pk=pk)
+    person_form = PersonForm(request.POST or None,
+                             request.FILES or None,
+                             instance=person_obj)
+
+    if request.is_ajax() and request.method == 'POST':
+        if person_form.is_valid():
+            response_data = {}
+            try:
+                person_form.save()
+                response_data['msg'] = u'Record was updated successfully'
+            except:
+                response_data['msg'] = u'Failed to update the record'
+            return HttpResponse(json.dumps(response_data),
+                                content_type="application/json")
+        else:
+            errors_dict = {}
+            if person_form.errors:
+                for error in person_form.errors:
+                    e = person_form.errors[error]
+                    errors_dict[error] = unicode(e)
+            return HttpResponseBadRequest(json.dumps(errors_dict))
+    return render(request, 'hello/edit.html', {'person_form': person_form})

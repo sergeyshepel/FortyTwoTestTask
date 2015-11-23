@@ -135,3 +135,9 @@ TEMPLATE_DIRS = (
 
 # Turn off south during test
 SOUTH_TESTS_MIGRATE = False
+
+# Default redirect page
+LOGIN_REDIRECT_URL = '/'
+
+# Default login page
+LOGIN_URL = '/login/'
