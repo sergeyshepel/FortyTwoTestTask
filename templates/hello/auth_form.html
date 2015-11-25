@@ -1,25 +1,18 @@
-{% block auth_form %}
-    <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                {% if not user.is_authenticated %}
-                <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
-                <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                    <form method="post" action="{% url 'login' %}" class="form-horizontal" accept-charset="UTF-8" style="margin-bottom: 20px;" id="loginForm">{% csrf_token %}
-                        <input style="margin-bottom: 15px;" type="text" placeholder="Username" id="username" name="username">
-                        <input style="margin-bottom: 15px;" type="password" placeholder="Password" id="password" name="password">
-
-                        <input class="btn btn-default btn-block" type="submit" id="sign-in" value="Sign In">
-                        <input type="hidden" name="next" value="/" />
-                    </form>
-                </div>
-                {% else %}
-                <a class="dropdown-toggle" href="#" data-toggle="dropdown">{{ user.username }} <strong class="caret"></strong></a>
-                <ul class="dropdown-menu">
-                    <li><a href="{% url 'logout' %}">Sign out</a></li>
-                </ul>
-                {% endif %}
-            </li>
-        </ul>
-    </div><!--/.nav-collapse -->
-{% endblock auth_form %}
+<li class="dropdown">
+    {% if not user.is_authenticated %}
+    <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
+    <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+        <form method="post" action="{% url 'login' %}" class="form-horizontal" accept-charset="UTF-8" style="margin-bottom: 20px;" id="loginForm">{% csrf_token %}
+            <input style="margin-bottom: 15px;" type="text" placeholder="Username" id="username" name="username">
+            <input style="margin-bottom: 15px;" type="password" placeholder="Password" id="password" name="password">
+            <input class="btn btn-default btn-block" type="submit" id="sign-in" value="Sign In">
+            <input type="hidden" name="next" value="/" />
+        </form>
+    </div>
+    {% else %}
+    <a class="dropdown-toggle" href="#" data-toggle="dropdown">{{ user.username }} <strong class="caret"></strong></a>
+    <ul class="dropdown-menu">
+        <li><a href="{% url 'logout' %}">Sign out</a></li>
+    </ul>
+    {% endif %}
+</li>

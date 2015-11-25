@@ -94,3 +94,12 @@ class Requests(models.Model):
     class Meta:
         verbose_name = 'Requests'
         verbose_name_plural = 'Requests'
+
+
+class DBActionsLog(models.Model):
+    model = models.CharField(max_length=100)
+    action = models.CharField(max_length=10)
+    date_of_action = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    def __unicode__(self):
+        return "%s[%s] at %s" % (self.model, self.action, self.date_of_action)
