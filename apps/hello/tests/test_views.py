@@ -113,7 +113,7 @@ class RequestsViewTests(TestCase):
         self.assertEquals(requsts_stored_in_db, 0)
 
 
-class EditviewTests(TestCase):
+class EditViewTests(TestCase):
     """
     Test edit view on rendering correct data and proper functionality
     """
@@ -208,3 +208,18 @@ class EditviewTests(TestCase):
             json.loads(response.content)['first_name'][0],
             u'This field is required.'
         )
+
+
+class TemplateTagTests(TestCase):
+    """
+    Check edit_link tag render
+    """
+    def test_edit_link_tag_render(self):
+        """ Check if edit_link rendered on index page """
+        login = self.client.login(username='admin', password='admin')
+        self.assertTrue(login)
+        response = self.client.get(reverse('index'))
+        person_pk = response.context['person'].pk
+        admin_url = reverse("admin:%s_%s_change" %
+            (Person._meta.app_label, Person._meta.model_name), args=[person_pk])
+        self.assertIn('<a href="' + admin_url + '">Edit</a>', response.content)
