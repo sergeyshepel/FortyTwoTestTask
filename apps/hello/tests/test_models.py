@@ -2,7 +2,7 @@
 import datetime
 
 from django.test import TestCase
-from hello.models import Person, Requests
+from hello.models import Person, Requests, DBActionsLog
 
 
 class PersonModelTest(TestCase):
@@ -59,3 +59,44 @@ class RequestsModelTest(TestCase):
                            str(request.remote_addr))
         self.assertTrue(isinstance(request, Requests))
         self.assertEqual(request.__unicode__(), request_unicode)
+
+class DBActionsLogModelTest(TestCase):
+    """
+    Test loggining of db actions with signals
+    """
+
+    def test_object_created_action(self):
+        """ Check if create object action is logging """
+        Person.objects.create(first_name="Vasilii",
+                                  last_name="Pupkin",
+                                  date_of_birthday="2014-02-01",
+                                  bio="Not very tall",
+                                  email="testemail@email.com",
+                                  jabber="",
+                                  skype="echo123",
+                                  other_contacts="No other contacts")
+
+        last_action = DBActionsLog.objects.last()
+
+        self.assertEqual(last_action.model, Person.__name__)
+        self.assertEqual(last_action.action, 'created')
+
+    def test_object_edited_action(self):
+        """ Check if edit object action is logging """
+        person = Person.objects.first()
+        person.name = "Vasilii"
+        person.save()
+
+        last_action = DBActionsLog.objects.last()
+
+        self.assertEqual(last_action.model, Person.__name__)
+        self.assertEqual(last_action.action, 'updated')
+
+    def test_object_deleted_action(self):
+        """ Check if delete object action is logging """
+        Person.objects.first().delete()
+
+        last_action = DBActionsLog.objects.last()
+
+        self.assertEqual(last_action.model, Person.__name__)
+        self.assertEqual(last_action.action, 'deleted')
