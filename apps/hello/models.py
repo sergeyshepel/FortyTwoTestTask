@@ -87,11 +87,13 @@ class Requests(models.Model):
     remote_addr = models.IPAddressField()
     is_secure = models.BooleanField()
     is_ajax = models.BooleanField()
+    priority = models.SmallIntegerField(default=0)
 
     def __unicode__(self):
         return "%s %s %s" % (self.time, self.path, self.remote_addr)
 
     class Meta:
+        ordering = ['-priority', '-time']
         verbose_name = 'Requests'
         verbose_name_plural = 'Requests'
 

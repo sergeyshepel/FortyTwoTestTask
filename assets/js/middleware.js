@@ -21,6 +21,7 @@ $( function() {
             $.each(response_data, function( index, item ){
                 var isoDate  = new Date(item.fields.time).toUTCString().replace("GMT", "");
                 tr = '<tr><td hidden>'+ item.pk+'</td>';
+                tr += '<td>' + item.fields.priority+'</td>';
                 tr += '<td>' + isoDate+'</td>';
                 tr += '<td>' + item.fields.path+'</td>';
                 tr += '<td>' + item.fields.method+'</td>';
