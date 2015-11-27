@@ -9,7 +9,8 @@
 {% block auth_form_items %}
    {{ block.super }}
    {% if user.is_authenticated %}
-   <li><a href="{% edit_link person %}">Edit</a></li>
+   <li><a href="{% url 'edit' pk=person.pk %}">Edit</a></li>
+   <li><a href="{% edit_link person %}">(admin)</a></li>
    {% endif %}
 {% endblock auth_form_items %}
 
@@ -44,13 +45,6 @@
             </div><!-- /.col-md-12 -->
             {% endif %}
         </div><!-- /.row -->
-        {% if user.is_authenticated %}
-        <div class="row">
-            <div class="col-md-12">
-                <p><a href="{% url 'edit' pk=person.pk %}">edit item</a></p>
-            </div><!-- /.col-md-12 -->
-        </div><!-- /.row -->
-        {% endif %}
         <hr>
         <div class="row">
             <div class="col-md-12">
