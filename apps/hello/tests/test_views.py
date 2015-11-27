@@ -222,4 +222,4 @@ class TemplateTagTests(TestCase):
         person_pk = response.context['person'].pk
         admin_url = reverse("admin:%s_%s_change" %
             (Person._meta.app_label, Person._meta.model_name), args=[person_pk])
-        self.assertIn('<a href="' + admin_url + '">Edit</a>', response.content)
+        self.assertIn('<a href="' + admin_url + '">(admin)</a>', response.content)
