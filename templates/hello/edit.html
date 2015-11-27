@@ -13,7 +13,7 @@
                     {{ person_form.media }}
                     <div class="row">
                         <div class="col-md-6">
-                        {% for field in person_form.visible_fields %}
+                            {% for field in person_form.visible_fields %}
                             {% if field.name in 'person-first_name, person-last_name, date_of_birthday'%}
                             <div class="form-group">
                                 <label for="{{ field.id_for_label }}" class="col-md-3 сontrol-label">
@@ -34,17 +34,17 @@
                                 </div><!-- /.col-md-8 col-md-pull-3 -->
                             </div><!-- /.form-group -->
                             {% endif %}
-                        {% endfor %}
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                        <div class="percent">0%</div>
+                            {% endfor %}
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                            <div class="percent">0%</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div id="status"></div>
-                            </div><!-- /.col-md-8 -->
-                        </div><!-- /.row -->
+                                    <div id="status"></div>
+                                </div><!-- /.col-md-8 -->
+                            </div><!-- /.row -->
                         </div><!-- /.col-md-6 -->
                         <div class="col-md-6 col-md-pull-2">
                         {% for field in person_form.visible_fields %}
