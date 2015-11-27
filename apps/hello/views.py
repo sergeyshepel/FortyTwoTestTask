@@ -21,7 +21,7 @@ def requests(request):
         response_data = {}
         latest_id = request.GET.get('latest_id', 1)
         new_requests = Requests.objects.all(
-        ).order_by('-time').filter(pk__gt=latest_id)[:10]
+        ).filter(pk__gt=latest_id)[:10]
         response_data['requests'] = serializers.serialize(
             "json", new_requests.reverse()
         )
@@ -29,7 +29,7 @@ def requests(request):
             json.dumps(response_data),
             content_type='application/json'
         )
-    new_requests = Requests.objects.all().order_by('-time')[:10]
+    new_requests = Requests.objects.all()[:10]
     return render(request,
                   'hello/requests.html',
                   {'new_requests': new_requests})
