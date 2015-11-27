@@ -112,6 +112,24 @@ class RequestsViewTests(TestCase):
 
         self.assertEquals(requsts_stored_in_db, 0)
 
+    def test_requests_page_shows_sorted_via_priority_records(self):
+        """ Check if requests with the highest priority go first """
+        for i in range(5):
+            self.client.get(reverse('index'))
+
+            request = Requests.objects.last()
+            request.priority = 5 - i
+            request.save()
+
+        response = self.client.get(reverse('requests'))
+        rendered_priority_list = []
+        for item in response.context['new_requests']:
+             rendered_priority_list.append(item.priority)
+
+        sorted_list = range(6)
+
+        self.assertEquals(rendered_priority_list, sorted_list[::-1])
+
 
 class EditViewTests(TestCase):
     """
