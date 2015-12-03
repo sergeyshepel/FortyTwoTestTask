@@ -1,1 +1,1 @@
-from hello.signals import signals
+from hello.signals import signals  # NOQA

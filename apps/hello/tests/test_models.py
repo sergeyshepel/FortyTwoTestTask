@@ -60,6 +60,7 @@ class RequestsModelTest(TestCase):
         self.assertTrue(isinstance(request, Requests))
         self.assertEqual(request.__unicode__(), request_unicode)
 
+
 class DBActionsLogModelTest(TestCase):
     """
     Test loggining of db actions with signals
@@ -68,13 +69,13 @@ class DBActionsLogModelTest(TestCase):
     def test_object_created_action(self):
         """ Check if create object action is logging """
         Person.objects.create(first_name="Vasilii",
-                                  last_name="Pupkin",
-                                  date_of_birthday="2014-02-01",
-                                  bio="Not very tall",
-                                  email="testemail@email.com",
-                                  jabber="",
-                                  skype="echo123",
-                                  other_contacts="No other contacts")
+                              last_name="Pupkin",
+                              date_of_birthday="2014-02-01",
+                              bio="Not very tall",
+                              email="testemail@email.com",
+                              jabber="",
+                              skype="echo123",
+                              other_contacts="No other contacts")
 
         last_action = DBActionsLog.objects.last()
 
