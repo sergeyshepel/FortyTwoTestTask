@@ -23,7 +23,7 @@ class PrintModelsTest(TestCase):
         with open(os.devnull, "w") as f:
             call_command('print_models', stdout=out, stderr=f)
         for model in get_models(include_auto_created=True):
-            self.assertIn('Model name: %s, total number of ' \
+            self.assertIn('Model name: %s, total number of '
                           'objects: %s' % (model.__name__,
                                            model._default_manager.count()),
                           out.getvalue())
