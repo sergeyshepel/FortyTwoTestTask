@@ -93,7 +93,7 @@ class Requests(models.Model):
         return "%s %s %s" % (self.time, self.path, self.remote_addr)
 
     class Meta:
-        ordering = ['-priority', '-time']
+        ordering = ['-time']
         verbose_name = 'Requests'
         verbose_name_plural = 'Requests'
 

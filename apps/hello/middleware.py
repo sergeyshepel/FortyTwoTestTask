@@ -1,3 +1,5 @@
+import random
+
 from hello.models import Requests
 
 
@@ -19,5 +21,6 @@ class GetRequestsMiddleware(object):
             remote_addr=request.META.get('REMOTE_ADDR',
                                          None),
             is_secure=request.is_secure(),
-            is_ajax=request.is_ajax()
+            is_ajax=request.is_ajax(),
+            priority=random.randint(0, 5)
         )
