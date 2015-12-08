@@ -29,7 +29,8 @@ def requests(request):
             json.dumps(response_data),
             content_type='application/json'
         )
-    new_requests = Requests.objects.all()[:10]
+    ten_requests = Requests.objects.all()[:10]
+    new_requests = sorted(ten_requests, key=lambda x: x.priority, reverse=True)
     return render(request,
                   'hello/requests.html',
                   {'new_requests': new_requests})

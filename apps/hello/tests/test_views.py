@@ -2,6 +2,7 @@
 import json
 
 from django.test import TestCase
+
 from django.core.urlresolvers import reverse
 
 from hello.models import Person, Requests
@@ -114,21 +115,22 @@ class RequestsViewTests(TestCase):
 
     def test_requests_page_shows_sorted_via_priority_records(self):
         """ Check if requests with the highest priority go first """
+
         for i in range(5):
             self.client.get(reverse('index'))
 
-            request = Requests.objects.last()
-            request.priority = 5 - i
-            request.save()
-
         response = self.client.get(reverse('requests'))
+
         rendered_priority_list = []
         for item in response.context['new_requests']:
-             rendered_priority_list.append(item.priority)
+            rendered_priority_list.append(item.priority)
 
-        sorted_list = range(6)
+        requests_sorted_via_priority = []
+        requests = Requests.objects.order_by('-priority')[:10]
+        for request in requests:
+            requests_sorted_via_priority.append(request.priority)
 
-        self.assertEquals(rendered_priority_list, sorted_list[::-1])
+        self.assertEquals(rendered_priority_list, requests_sorted_via_priority)
 
 
 class EditViewTests(TestCase):
