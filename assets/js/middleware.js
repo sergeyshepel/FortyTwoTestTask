@@ -19,8 +19,6 @@ function sortTable(table_body, order) {
 }
 
 $( function() {
-    // sort
-    sortTable($("#requests_table tbody"), 1);
     // asc
     $( "#requests_table" ).on( "click", "th.headerSortDown", function(){
         $(this).toggleClass("headerSortDown headerSortUp");
