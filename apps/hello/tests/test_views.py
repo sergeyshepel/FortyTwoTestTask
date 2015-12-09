@@ -126,7 +126,8 @@ class RequestsViewTests(TestCase):
             rendered_priority_list.append(item.priority)
 
         requests_sorted_via_priority = []
-        requests = Requests.objects.order_by('-priority')[:10]
+        ten_requests = Requests.objects.all()[:10]
+        requests = sorted(ten_requests, key=lambda x: x.priority, reverse=True)
         for request in requests:
             requests_sorted_via_priority.append(request.priority)
 
