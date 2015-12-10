@@ -18,6 +18,7 @@ class Migration(SchemaMigration):
             ('email', self.gf('django.db.models.fields.EmailField')(max_length=75)),
             ('jabber', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
             ('skype', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('person_pic', self.gf('django.db.models.fields.files.ImageField')(default='', max_length=100, blank=True)),                     
             ('other_contacts', self.gf('django.db.models.fields.TextField')(max_length=255, blank=True)),
         ))
         db.send_create_signal(u'hello', ['Person'])
@@ -39,6 +40,7 @@ class Migration(SchemaMigration):
             'jabber': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'other_contacts': ('django.db.models.fields.TextField', [], {'max_length': '255', 'blank': 'True'}),
+            'person_pic': ('django.db.models.fields.files.ImageField', [], {'default': "''", 'max_length': '100', 'blank': 'True'}),
             'skype': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'})
         }
     }

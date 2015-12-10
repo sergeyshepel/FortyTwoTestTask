@@ -24,7 +24,8 @@ class Person(models.Model):
 
     person_pic = models.ImageField("photo",
                                    upload_to='pic_folder/',
-                                   default='pic_folder/None/no-img.jpg')
+                                   default='',
+                                   blank=True)
 
     def __unicode__(self):
         return "%s %s %s" % (self.first_name, self.last_name, self.email)

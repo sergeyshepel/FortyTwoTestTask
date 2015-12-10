@@ -38,6 +38,7 @@ class Migration(SchemaMigration):
             'jabber': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'other_contacts': ('django.db.models.fields.TextField', [], {'max_length': '255', 'blank': 'True'}),
+            'person_pic': ('django.db.models.fields.files.ImageField', [], {'default': "''", 'max_length': '100', 'blank': 'True'}),
             'skype': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'})
         },
         u'hello.requests': {
