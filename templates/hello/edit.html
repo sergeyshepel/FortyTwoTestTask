@@ -30,7 +30,14 @@
                                 </label>
                                 <br>
                                 <div class="col-md-8 col-md-pull-3">
+                                    {% if field.value %}
+                                        {{ field }}
+                                    {% else %}
+                                    <a href="{{ STATIC_URL }}images/no-img.jpg" class="thumbnail">
+                                        <img src='{{ STATIC_URL }}images/no-img.jpg' alt="Person's photo" width="200" height="200">
+                                    </a>
                                     {{ field }}
+                                    {% endif %}
                                 </div><!-- /.col-md-8 col-md-pull-3 -->
                             </div><!-- /.form-group -->
                             {% endif %}
