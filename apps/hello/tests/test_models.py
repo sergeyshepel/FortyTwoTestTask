@@ -4,7 +4,7 @@ import datetime
 from django.test import TestCase
 from hello.models import Person, Requests, DBActionsLog
 
-from hello.signals import signals  # NOQA
+from apps.hello import signals  # NOQA
 
 
 class PersonModelTest(TestCase):

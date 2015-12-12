@@ -28,6 +28,13 @@ class Migration(SchemaMigration):
 
 
     models = {
+        u'hello.dbactionslog': {
+            'Meta': {'object_name': 'DBActionsLog'},
+            'action': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
+            'date_of_action': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
         u'hello.person': {
             'Meta': {'object_name': 'Person'},
             'bio': ('django.db.models.fields.TextField', [], {'max_length': '255', 'blank': 'True'}),
