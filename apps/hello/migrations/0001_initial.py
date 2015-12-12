@@ -8,6 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'DBActionsLog'
+        db.create_table(u'hello_dbactionslog', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('model', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('action', self.gf('django.db.models.fields.CharField')(max_length=10)),
+            ('date_of_action', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal(u'hello', ['DBActionsLog'])
+        
         # Adding model 'Person'
         db.create_table(u'hello_person', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -18,7 +27,7 @@ class Migration(SchemaMigration):
             ('email', self.gf('django.db.models.fields.EmailField')(max_length=75)),
             ('jabber', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
             ('skype', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
-            ('person_pic', self.gf('django.db.models.fields.files.ImageField')(default='', max_length=100, blank=True)),                     
+            ('person_pic', self.gf('django.db.models.fields.files.ImageField')(default='', max_length=100, blank=True)),
             ('other_contacts', self.gf('django.db.models.fields.TextField')(max_length=255, blank=True)),
         ))
         db.send_create_signal(u'hello', ['Person'])
@@ -28,8 +37,18 @@ class Migration(SchemaMigration):
         # Deleting model 'Person'
         db.delete_table(u'hello_person')
 
+        # Deleting model 'DBActionsLog'
+        db.delete_table(u'hello_dbactionslog')
+
 
     models = {
+        u'hello.dbactionslog': {
+            'Meta': {'object_name': 'DBActionsLog'},
+            'action': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
+            'date_of_action': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
         u'hello.person': {
             'Meta': {'object_name': 'Person'},
             'bio': ('django.db.models.fields.TextField', [], {'max_length': '255', 'blank': 'True'}),
