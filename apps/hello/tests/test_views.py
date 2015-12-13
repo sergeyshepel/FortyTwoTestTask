@@ -205,6 +205,6 @@ class EditviewTests(TestCase):
                                     person,
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEquals(
-            json.loads(response.content)['first_name'],
-            '<ul class="errorlist"><li>This field is required.</li></ul>'
+            json.loads(response.content)['first_name'][0],
+            u'This field is required.'
         )

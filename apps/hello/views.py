@@ -52,11 +52,5 @@ def edit(request, pk=None):
                 response_data['msg'] = u'Failed to update the record'
             return HttpResponse(json.dumps(response_data),
                                 content_type="application/json")
-        else:
-            errors_dict = {}
-            if person_form.errors:
-                for error in person_form.errors:
-                    e = person_form.errors[error]
-                    errors_dict[error] = unicode(e)
-            return HttpResponseBadRequest(json.dumps(errors_dict))
+        return HttpResponseBadRequest(json.dumps(dict(person_form.errors)))
     return render(request, 'hello/edit.html', {'person_form': person_form})
