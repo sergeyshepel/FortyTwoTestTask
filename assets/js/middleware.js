@@ -42,16 +42,17 @@ $( function() {
         var latest_id = Math.max.apply(Math, ids);
 
         $.getJSON( "/requests/", { "latest_id": latest_id.toString() }, function( data ) {
-            var default_title = $( "title" ).text();
-            var new_requests = jQuery.parseJSON( data.requests );
-            var actual_number_of_requests = Object.keys(new_requests).length;
+            var default_title = $("title").text();
+            var new_requests = jQuery.parseJSON(data.requests);
+            var number_of_new_requests = Object.keys(new_requests).length;
+            var current_number_of_rows = $(".table tbody").children().length;
 
             function unset_title( title ) {
                 $( "title" ).text( title );
             };
 
-            function prepend_new_requests(response_data, requests_in_response, total_number_of_new_requests){
-                $( "title" ).text('(' + total_number_of_new_requests + ')' + " new requests stored in db!");
+            function prepend_new_requests(response_data, requests_in_response, rows_on_page){
+                $( "title" ).text('(' + requests_in_response + ')' + " new requests stored in db!");
 
                 $.each(response_data, function( index, item ){
                     var isoDate  = new Date(item.fields.time).toUTCString().replace("GMT", "");
@@ -69,18 +70,14 @@ $( function() {
                     $(".table  > tbody > tr:first").before(tr);
                 });
 
-                for(var i = 0; i < (requests_in_response); i++) {
-                    $( ".table tbody tr:last-child" ).remove();
+                if (rows_on_page + requests_in_response > 10) {
+                    for(var i = 0; i < (requests_in_response); i++) {
+                        $(".table tbody tr:last-child").remove();
+                    }
                 }
-
             }
-
-            if ( data.requests_quantity > 0 ) {
-
-                var number_of_rows = $( ".table tbody" ).children().length;
-
-                prepend_new_requests(new_requests, actual_number_of_requests, data.requests_quantity);
-
+            if (number_of_new_requests > 0) {
+                prepend_new_requests(new_requests, number_of_new_requests, current_number_of_rows);
                 // sort
                 var priorityClassName = $('#requests_table th:nth-child(2)').attr('class');
                 if (priorityClassName === 'headerSortDown'){
