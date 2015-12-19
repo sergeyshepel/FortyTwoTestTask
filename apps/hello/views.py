@@ -20,11 +20,10 @@ def requests(request):
         response_data = {}
         latest_id = request.GET.get('latest_id', 1)
         new_requests = Requests.objects.all(
-        ).order_by('-time').filter(pk__gt=latest_id).reverse()
+        ).order_by('-time').filter(pk__gt=latest_id)[:10]
         response_data['requests'] = serializers.serialize(
-            "json", new_requests[:10]
+            "json", new_requests.reverse()
         )
-        response_data['requests_quantity'] = len(new_requests)
         return HttpResponse(
             json.dumps(response_data),
             content_type='application/json'
