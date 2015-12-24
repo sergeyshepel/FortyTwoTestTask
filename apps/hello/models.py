@@ -105,3 +105,15 @@ class DBActionsLog(models.Model):
 
     def __unicode__(self):
         return "%s[%s] at %s" % (self.model, self.action, self.date_of_action)
+
+
+class Team(models.Model):
+    team_name = models.CharField(max_length=80, unique=True)
+    team_members = models.ManyToManyField(Person, blank=True)
+
+    def __unicode__(self):
+        return self.team_name
+
+    class Meta:
+        verbose_name = ('Team')
+        verbose_name_plural = ('Teams')
