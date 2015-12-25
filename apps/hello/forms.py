@@ -2,7 +2,7 @@
 from django.forms import ModelForm
 from django.forms.widgets import Textarea
 
-from hello.models import Person
+from hello.models import Person, Team
 from hello.widgets import DataPickerWidget, UploadImageWidget
 
 
@@ -28,3 +28,16 @@ class PersonForm(ModelForm):
                 self.fields[field].widget.attrs.update({
                     'class': 'form-control'
                 })
+
+
+class TeamForm(ModelForm):
+    class Meta:
+        model = Team
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(TeamForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })

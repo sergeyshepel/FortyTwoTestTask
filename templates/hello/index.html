@@ -9,6 +9,7 @@
 {% block auth_form_items %}
    {{ block.super }}
    {% if user.is_authenticated %}
+   <li><a href="{% url 'addTeam' %}">Add team</a></li>
    <li><a href="{% url 'edit' pk=person.pk %}">Edit</a></li>
    <li><a href="{% edit_link person %}">(admin)</a></li>
    {% endif %}

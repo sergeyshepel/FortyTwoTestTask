@@ -8,7 +8,7 @@ from django.core import serializers
 from django.contrib.auth.decorators import login_required
 
 from hello.models import Person, Requests
-from hello.forms import PersonForm
+from hello.forms import PersonForm, TeamForm
 
 
 def index(request):
@@ -55,3 +55,22 @@ def edit(request, pk=None):
                                 content_type="application/json")
         return HttpResponseBadRequest(json.dumps(dict(person_form.errors)))
     return render(request, 'hello/edit.html', {'person_form': person_form})
+
+
+@login_required()
+def addTeam(request):
+    if request.is_ajax() and request.method == 'POST':
+        team_form = TeamForm(request.POST)
+        if team_form.is_valid():
+            response_data = {}
+            try:
+                team_form.save()
+                response_data['msg'] = u'Team was added successfully'
+            except:
+                response_data['msg'] = u'Failed to add team'
+            return HttpResponse(json.dumps(response_data),
+                                content_type="application/json")
+        return HttpResponseBadRequest(json.dumps(dict(team_form.errors)))
+    else:
+        team_form = TeamForm()
+    return render(request, 'hello/team.html', {'team_form': team_form})
