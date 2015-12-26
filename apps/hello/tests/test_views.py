@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from django.core.urlresolvers import reverse
 
-from hello.models import Person, Requests
+from hello.models import Person, Requests, Team
 from hello.forms import PersonForm
 
 NUMBER_OF_PERSON = 10
@@ -246,3 +246,27 @@ class TemplateTagTests(TestCase):
                             args=[person_pk])
         self.assertIn('<a href="' + admin_url + '">(admin)</a>',
                       response.content)
+
+
+class AddTeamTests(TestCase):
+    """
+    Test addTeam view on rendering correct data and proper functionality
+    """
+    def test_addTeam_view_creates_Team_model_via_ajax(self):
+        """
+        Ajax post method for teamForm
+        Form should create Team object
+        """
+        login = self.client.login(username='admin', password='admin')
+        self.assertTrue(login)
+        member = Person.objects.first()
+        new_team = {}
+        new_team['team_name'] = u'42ccDev'
+        new_team['team_members'] = member.pk
+        response = self.client.post(reverse('addTeam'),
+                                    new_team,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        created_team = Team.objects.first()
+        self.assertEquals(created_team.team_name, new_team['team_name'])
+        self.assertEquals(json.loads(response.content)['msg'],
+                          'Team was added successfully')

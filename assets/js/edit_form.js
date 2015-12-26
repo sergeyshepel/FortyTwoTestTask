@@ -25,7 +25,7 @@ $(function() {
         $(this).ajaxSubmit({
             beforeSend: function() {
                 status.empty();
-                $('#commonform input, #commonform textarea').attr('readonly', 'readonly');
+                $('#commonform input, #commonform textarea, #commonform select').attr('readonly', 'readonly');
                 $("#commonform .btn").attr('disabled', 'disabled');
                 var percentVal = '0%';
                 bar.addClass( "active" );
@@ -41,7 +41,7 @@ $(function() {
                 bar.removeClass( "active" );
                 var respone_msg = $.parseJSON(xhr.responseText);
                 status.html(respone_msg.msg);
-                $('#commonform input, #commonform textarea').removeAttr( "readonly" );
+                $('#commonform input, #commonform textarea, #commonform select').removeAttr( "readonly" );
                 $("#commonform .btn").removeAttr('disabled', 'disabled');
             },
             statusCode: {
