@@ -21,20 +21,23 @@ class PersonForm(ModelForm):
             'bio': Textarea(attrs={'rows': '5'}),
             'other_contacts': Textarea(attrs={'rows': '5'}),
         }
-    teams = ModelMultipleChoiceField(queryset=Team.objects.all(),
-                                     widget=SelectMultiple(attrs={'size': '10'}),
-                                     required=False)
+    teams = ModelMultipleChoiceField(
+        queryset=Team.objects.all(),
+        widget=SelectMultiple(attrs={'size': '10'}),
+        required=False
+    )
 
     def __init__(self, *args, **kwargs):
 
         if 'instance' in kwargs:
             initial = kwargs.setdefault('initial', {})
-            initial['teams'] = [t.pk for t in kwargs['instance'].team_set.all()]
+            initial['teams'] = [team.pk
+                                for team in kwargs['instance'].team_set.all()]
 
         ModelForm.__init__(self, *args, **kwargs)
 
         super(PersonForm, self).__init__(*args, **kwargs)
-        
+
         for field in iter(self.fields):
             if field != 'person_pic':
                 self.fields[field].widget.attrs.update({
@@ -45,6 +48,7 @@ class PersonForm(ModelForm):
         instance = ModelForm.save(self, False)
 
         old_save_m2m = self.save_m2m
+
         def save_m2m():
             old_save_m2m()
             instance.team_set.clear()

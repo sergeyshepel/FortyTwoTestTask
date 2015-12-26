@@ -230,6 +230,25 @@ class EditViewTests(TestCase):
             u'This field is required.'
         )
 
+    def test_edit_view_able_to_add_Person_to_a_team(self):
+        """
+        User should be able to add Person to a team from Edit page
+        """
+        login = self.client.login(username='admin', password='admin')
+        self.assertTrue(login)
+
+        person = Person.objects.first().__dict__
+        team = Team.objects.create(team_name='42cc')
+        person['teams'] = team.pk
+
+        response = self.client.post(reverse('edit', args=[1]),
+                                    person,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        updated_person = Person.objects.first()
+        self.assertTrue(isinstance(updated_person.team_set.all()[0], Team))
+        self.assertEquals(json.loads(response.content)['msg'],
+                          'Record was updated successfully')
+
 
 class TemplateTagTests(TestCase):
     """
