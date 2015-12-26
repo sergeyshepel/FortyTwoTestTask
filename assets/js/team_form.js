@@ -1,11 +1,6 @@
 $(function() {
-    var form = $("#commonform");
-
-    var bar = $('.progress-bar');
-    var percent = $('.percent');
+    var form = $("#teamForm");
     var status = $('#status');
-
-    $( ".bootstrap-filestyle" ).css({"z-index": "1"});
 
     function errorHandeling(obj, error) {
         obj.parent().addClass("has-error");
@@ -24,25 +19,18 @@ $(function() {
         // submit the form
         $(this).ajaxSubmit({
             beforeSend: function() {
-                status.empty();
-                $('#commonform input, #commonform textarea, #commonform select').attr('readonly', 'readonly');
-                $("#commonform .btn").attr('disabled', 'disabled');
-                var percentVal = '0%';
-                bar.addClass( "active" );
-                bar.width(percentVal);
-                percent.html(percentVal);
-            },
-            uploadProgress: function(event, position, total, percentComplete) {
-                var percentVal = percentComplete + '%';
-                bar.width(percentVal);
-                percent.html(percentVal);
+                $('#teamForm input').attr('readonly', 'readonly');
+                $("#teamForm .btn").attr('disabled', 'disabled');
             },
             complete: function(xhr) {
-                bar.removeClass( "active" );
                 var respone_msg = $.parseJSON(xhr.responseText);
                 status.html(respone_msg.msg);
-                $('#commonform input, #commonform textarea, #commonform select').removeAttr( "readonly" );
-                $("#commonform .btn").removeAttr('disabled', 'disabled');
+                setTimeout(function(){
+                    $("#status").empty();
+                }, 2000);
+                status.html(respone_msg.msg);
+                $('#teamForm input').removeAttr( "readonly" );
+                $("#teamForm .btn").removeAttr('disabled', 'disabled');
             },
             statusCode: {
             400: function( data ) {

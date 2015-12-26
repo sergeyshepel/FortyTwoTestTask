@@ -11,4 +11,7 @@ urlpatterns = patterns(
     url(
         r'^edit/(?P<pk>\d+)/$', 'edit', name='edit'
     ),
+    url(
+        r'^team/$', 'addTeam', name='addTeam'
+    ),
 )

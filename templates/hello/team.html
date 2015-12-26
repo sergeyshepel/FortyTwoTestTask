@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}Add team{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-horizontal" action="/team/" method="POST" role="form" id="teamForm">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {% for field in team_form.visible_fields %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}" class="col-md-3 сontrol-label">
+                                    {{ field.label_tag }}{% if field.field.required %} *{% endif %}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                    <p class="help-inline"><small>{{ field.help_text }}</small></p>
+                                    {% endif %}
+                                </div><!-- /.col-md-8 -->
+                            </div><!-- /.form-group -->
+                            {% endfor %}
+                         </div><!-- /.col-md-6 -->
+                    </div><!-- /.row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="status"></div>
+                            <div class="form-actions">
+                                <input class="btn btn-primary btn-large" name="create" type="submit" value="Create" id="id_submit"/>
+                                <a href="{% url 'index' %}">Cancel</a>
+                            </div><!-- /.form-actions -->
+                        </div><!-- /.col-md-12 -->
+                    </div><!-- /.row -->
+                </form><!-- /.form-horizontal -->
+            </div><!-- /.col-md-12 -->
+        </div><!-- /.row -->
+    </div><!-- /.container -->
+{% endblock content %}
+{% block js %}
+   {{ block.super }}
+   <script src="{% static 'js/team_form.js' %}"></script>
+   <!-- jQuery forms -->
+   <script src="{% static 'js/jquery.form.min.js' %}"></script>
+{% endblock js %}

@@ -84,6 +84,18 @@
                                         {{ person_form.bio }}
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="{{ person_form.bio.id_for_label }}" class="col-md-3 сontrol-label">
+                                        {{ person_form.teams.label_tag }}{% if person_form.teams.field.required %} *{% endif %}
+                                    </label>
+                                    <br />
+                                    <div class="col-md-7 col-md-pull-3">
+                                        {{ person_form.teams }}
+                                        {% if person_form.teams.help_text %}
+                                        <p class="help-inline"><small>{{ person_form.teams.help_text }}</small></p>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             {% endif %}
                         {% endfor %}
                         </div><!-- /.col-md-6 col-md-pull-2-->

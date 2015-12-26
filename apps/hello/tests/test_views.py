@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from django.core.urlresolvers import reverse
 
-from hello.models import Person, Requests
+from hello.models import Person, Requests, Team
 from hello.forms import PersonForm
 
 NUMBER_OF_PERSON = 10
@@ -71,6 +71,19 @@ class IndexViewTests(TestCase):
         self.assertNotContains(response, 'Vasilii0')
         self.assertNotContains(response, 'Pupkin0')
         self.assertNotContains(response, 'testemail@email.com')
+
+    def test_index_view_returns_teams(self):
+        """ Index view should return teams """
+        new_team = Team.objects.create(team_name="42cc")
+        person = Person.objects.first()
+        person.team_set.add(new_team)
+        person.save()
+        response = self.client.get(reverse('index'))
+        self.assertEqual(response.status_code, 200)
+        teams_in_response = response.context['person'].team_set.all()
+        for team in teams_in_response:
+            self.assertTrue(isinstance(team, Team))
+            self.assertEqual(team.team_name, new_team.team_name)
 
 
 class RequestsViewTests(TestCase):
@@ -230,6 +243,25 @@ class EditViewTests(TestCase):
             u'This field is required.'
         )
 
+    def test_edit_view_able_to_add_Person_to_a_team(self):
+        """
+        User should be able to add Person to a team from Edit page
+        """
+        login = self.client.login(username='admin', password='admin')
+        self.assertTrue(login)
+
+        person = Person.objects.first().__dict__
+        team = Team.objects.create(team_name='42cc')
+        person['teams'] = team.pk
+
+        response = self.client.post(reverse('edit', args=[1]),
+                                    person,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        updated_person = Person.objects.first()
+        self.assertTrue(isinstance(updated_person.team_set.all()[0], Team))
+        self.assertEquals(json.loads(response.content)['msg'],
+                          'Record was updated successfully')
+
 
 class TemplateTagTests(TestCase):
     """
@@ -246,3 +278,27 @@ class TemplateTagTests(TestCase):
                             args=[person_pk])
         self.assertIn('<a href="' + admin_url + '">(admin)</a>',
                       response.content)
+
+
+class AddTeamTests(TestCase):
+    """
+    Test addTeam view on rendering correct data and proper functionality
+    """
+    def test_addTeam_view_creates_Team_model_via_ajax(self):
+        """
+        Ajax post method for teamForm
+        Form should create Team object
+        """
+        login = self.client.login(username='admin', password='admin')
+        self.assertTrue(login)
+        member = Person.objects.first()
+        new_team = {}
+        new_team['team_name'] = u'42ccDev'
+        new_team['team_members'] = member.pk
+        response = self.client.post(reverse('addTeam'),
+                                    new_team,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        created_team = Team.objects.first()
+        self.assertEquals(created_team.team_name, new_team['team_name'])
+        self.assertEquals(json.loads(response.content)['msg'],
+                          'Team was added successfully')
