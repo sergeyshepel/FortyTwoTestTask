@@ -72,6 +72,19 @@ class IndexViewTests(TestCase):
         self.assertNotContains(response, 'Pupkin0')
         self.assertNotContains(response, 'testemail@email.com')
 
+    def test_index_view_returns_teams(self):
+        """ Index view should return teams """
+        new_team = Team.objects.create(team_name="42cc")
+        person = Person.objects.first()
+        person.team_set.add(new_team)
+        person.save()
+        response = self.client.get(reverse('index'))
+        self.assertEqual(response.status_code, 200)
+        teams_in_response = response.context['person'].team_set.all()
+        for team in teams_in_response:
+            self.assertTrue(isinstance(team, Team))
+            self.assertEqual(team.team_name, new_team.team_name)
+
 
 class RequestsViewTests(TestCase):
     """

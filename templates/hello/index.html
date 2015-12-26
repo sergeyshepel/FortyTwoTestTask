@@ -39,6 +39,12 @@
                 {{ person.other_contacts | linebreaks }}
                 <p>Bio parameters:</p>
                 {{ person.bio | linebreaks }}
+                <p><b>Teams:</b></p>
+                <p>
+                {% for team in person.team_set.all %}
+                    {{ team.team_name }}{% if not forloop.last %},{% endif %}
+                {% endfor %}
+                </p>
             </div><!-- /.col-md-6 -->
             {% elif 'login' in request.path %}
             <div class="col-md-12">
