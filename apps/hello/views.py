@@ -58,7 +58,7 @@ def edit(request, pk=None):
 
 
 @login_required()
-def addTeam(request):
+def add_team(request):
     if request.is_ajax() and request.method == 'POST':
         team_form = TeamForm(request.POST)
         if team_form.is_valid():
