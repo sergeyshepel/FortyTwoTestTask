@@ -44,24 +44,6 @@ class PersonForm(ModelForm):
                     'class': 'form-control'
                 })
 
-    def save(self, commit=True):
-        instance = ModelForm.save(self, False)
-
-        old_save_m2m = self.save_m2m
-
-        def save_m2m():
-            old_save_m2m()
-            instance.team_set.clear()
-            for team in self.cleaned_data['teams']:
-                instance.team_set.add(team)
-        self.save_m2m = save_m2m
-
-        if commit:
-            instance.save()
-            self.save_m2m()
-
-        return instance
-
 
 class TeamForm(ModelForm):
     class Meta:

@@ -47,7 +47,15 @@ def edit(request, pk=None):
         if person_form.is_valid():
             response_data = {}
             try:
-                person_form.save()
+                teams = person_form.cleaned_data['teams']
+                updated_person = person_form.save(commit=False)
+                if teams:
+                    for team in teams:
+                        updated_person.team_set.add(team)
+                else:
+                    updated_person.team_set.clear()
+                updated_person.save()
+                person_form.save_m2m()
                 response_data['msg'] = u'Record was updated successfully'
             except:
                 response_data['msg'] = u'Failed to update the record'
