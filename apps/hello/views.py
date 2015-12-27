@@ -71,6 +71,10 @@ def add_team(request):
             return HttpResponse(json.dumps(response_data),
                                 content_type="application/json")
         return HttpResponseBadRequest(json.dumps(dict(team_form.errors)))
-    else:
-        team_form = TeamForm()
+    elif request.method == 'POST' or request.is_ajax():
+        response_data = {}
+        response_data['msg'] = u'Method not allowed!'
+        return HttpResponseBadRequest(json.dumps(response_data),
+                                      content_type="application/json")
+    team_form = TeamForm()
     return render(request, 'hello/team.html', {'team_form': team_form})

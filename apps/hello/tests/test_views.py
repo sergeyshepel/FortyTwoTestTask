@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from hello.models import Person, Requests, Team
-from hello.forms import PersonForm
+from hello.forms import PersonForm, TeamForm
 
 NUMBER_OF_PERSON = 10
 
@@ -302,3 +302,49 @@ class AddTeamTests(TestCase):
         self.assertEquals(created_team.team_name, new_team['team_name'])
         self.assertEquals(json.loads(response.content)['msg'],
                           'Team was added successfully')
+
+    def test_add_team_view_on_get_request(self):
+        """ Test add_team vieon on get request """
+        login = self.client.login(username='admin', password='admin')
+        self.assertTrue(login)
+        response = self.client.get(reverse('add_team'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.context['team_form'], TeamForm)
+
+    def test_add_team_view_on_ajax_get_request(self):
+        """ Test add_team vieon on ajax get request """
+        login = self.client.login(username='admin', password='admin')
+        self.assertTrue(login)
+        response = self.client.get(reverse('add_team'),
+                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertNotEquals(
+            json.loads(response.content)['msg'][0],
+            u'Method not allowed!'
+        )
+
+    def test_add_team_view_on_not_ajax_request(self):
+        """ Test add_team view on not ajax post request """
+        login = self.client.login(username='admin', password='admin')
+        self.assertTrue(login)
+        new_team = {}
+        new_team['team_name'] = u'42ccDev'
+        response = self.client.post(reverse('add_team'),
+                                    new_team)
+        self.assertEqual(response.status_code, 400)
+        self.assertNotEquals(
+            json.loads(response.content)['msg'][0],
+            u'Method not allowed!'
+        )
+
+    def test_add_team_form_not_valid(self):
+        """ Test add_team view on not valid form submition """
+        login = self.client.login(username='admin', password='admin')
+        self.assertTrue(login)
+        response = self.client.post(reverse('add_team'),
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+        self.assertEquals(
+            json.loads(response.content)['team_name'][0],
+            u'This field is required.'
+        )
