@@ -284,7 +284,7 @@ class AddTeamTests(TestCase):
     """
     Test add_team view on rendering correct data and proper functionality
     """
-    def test_addTeam_view_creates_Team_model_via_ajax(self):
+    def test_add_team_view_creates_Team_object(self):
         """
         Ajax post method for teamForm
         Form should create Team object
