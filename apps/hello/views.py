@@ -47,7 +47,15 @@ def edit(request, pk=None):
         if person_form.is_valid():
             response_data = {}
             try:
-                person_form.save()
+                teams = person_form.cleaned_data['teams']
+                updated_person = person_form.save(commit=False)
+                if teams:
+                    for team in teams:
+                        updated_person.team_set.add(team)
+                else:
+                    updated_person.team_set.clear()
+                updated_person.save()
+                person_form.save_m2m()
                 response_data['msg'] = u'Record was updated successfully'
             except:
                 response_data['msg'] = u'Failed to update the record'
@@ -58,7 +66,7 @@ def edit(request, pk=None):
 
 
 @login_required()
-def addTeam(request):
+def add_team(request):
     if request.is_ajax() and request.method == 'POST':
         team_form = TeamForm(request.POST)
         if team_form.is_valid():
@@ -71,6 +79,10 @@ def addTeam(request):
             return HttpResponse(json.dumps(response_data),
                                 content_type="application/json")
         return HttpResponseBadRequest(json.dumps(dict(team_form.errors)))
-    else:
-        team_form = TeamForm()
+    elif request.method == 'POST' or request.is_ajax():
+        response_data = {}
+        response_data['msg'] = u'Method not allowed!'
+        return HttpResponseBadRequest(json.dumps(response_data),
+                                      content_type="application/json")
+    team_form = TeamForm()
     return render(request, 'hello/team.html', {'team_form': team_form})
