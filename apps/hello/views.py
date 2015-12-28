@@ -50,6 +50,7 @@ def edit(request, pk=None):
                 teams = person_form.cleaned_data['teams']
                 updated_person = person_form.save(commit=False)
                 if teams:
+                    updated_person.team_set.clear()
                     for team in teams:
                         updated_person.team_set.add(team)
                 else:
